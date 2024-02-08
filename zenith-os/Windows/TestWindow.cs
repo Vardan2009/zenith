@@ -12,7 +12,7 @@ namespace zenithos.Windows
         public Button clickButton = new("Click Me!", 20, 50, Color.Green, Kernel.defFont, 10);
         public Label clickLabel = new("You Clicked it 0 times",20,100,Kernel.defFont,Color.White);
         int times;
-        public TestWindow() : base(20, 20, 200, 300, "Test Window", Kernel.defFont)
+        public TestWindow() : base(100, 100, 300, 300, "Test Window", Kernel.defFont,true)
         {
           controls.Add(welcomeLabel); controls.Add(clickButton); controls.Add(clickLabel);
         }

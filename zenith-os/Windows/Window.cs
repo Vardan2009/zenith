@@ -20,7 +20,7 @@ namespace zenithos.Windows
         bool lmD;
         public List<Control> controls = new();
         public bool resizable = false;
-
+        public Button closeButton;
         public Window(int x, int y, int w, int h, string title, Font font,bool resizable = false)
         {
             this.x = x;
@@ -30,6 +30,7 @@ namespace zenithos.Windows
             this.title = title;
             this.font = font;
             this.resizable = resizable;
+            closeButton = new Button("X", w - 20 - font.Width,2, Color.Red, font);
         }
 
         public virtual void Update(VBECanvas canv, int mX, int mY, bool mD, int dmX, int dmY)
@@ -44,6 +45,14 @@ namespace zenithos.Windows
                 resizing = true;
             }
 
+            closeButton.x = w - 20 - font.Width;
+
+            if (closeButton.clickedOnce)
+            {
+                Kernel.activeIndex = -1;
+                Kernel.windows.Remove(this);
+            }
+
             if (resizing)
             {
                 w += dmX;
@@ -56,6 +65,18 @@ namespace zenithos.Windows
                 {
                     resizing = false;
                 }
+            }
+
+            if(Kernel.activeIndex == Kernel.windows.FindIndex(x => x == this) && Kernel.activeIndex != -1)
+            {
+                canv.DrawFilledRectangle(Kernel.highlightCol, x, y, w, window_titlebarsize);
+                canv.DrawString(title, font, Kernel.textColLight, x + 10, y + 10);
+            }
+            else
+            {
+                canv.DrawFilledRectangle(Kernel.bgCol, x, y, w, window_titlebarsize);
+                canv.DrawRectangle(Kernel.highlightCol, x, y, w, window_titlebarsize);
+                canv.DrawString(title, font, Kernel.highlightCol, x + 10, y + 10);
             }
 
             if (dragging)
@@ -78,20 +99,13 @@ namespace zenithos.Windows
                 {
                     y = (int)canv.Mode.Height - h - window_titlebarsize;
                 }
-                canv.DrawFilledRectangle(Kernel.highlightCol, x, y, w, window_titlebarsize);
-                canv.DrawString(title, font, Kernel.textColLight, x + 10, y + 10);
+              
                 if (!mD)
                 {
                     dragging = false;
                 }
             }
-            else
-            {
-                canv.DrawFilledRectangle(Kernel.bgCol, x, y, w, window_titlebarsize);
-                canv.DrawRectangle(Kernel.highlightCol, x, y, w, window_titlebarsize);
-                canv.DrawString(title, font, Kernel.highlightCol, x + 10, y + 10);
-            }
-
+          
            
             canv.DrawFilledRectangle(Kernel.bgCol, x, y + window_titlebarsize, w, h);
             if(resizable)
@@ -102,6 +116,7 @@ namespace zenithos.Windows
             {
                 c.Update(x, y + window_titlebarsize);
             }
+            closeButton.Update(x, y);
 
             lmD = mD;
         }

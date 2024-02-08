@@ -17,7 +17,7 @@ namespace zenithos.Windows
         string operation = null;
         bool changingSecond = false;
         bool expanded = false;
-        public Calc() : base(20, 20, 240, 270, "Calculator", Kernel.defFont)
+        public Calc() : base(100, 100, 240, 270, "Calculator", Kernel.defFont)
         {
             int e = 1;
             for(int i =0;i < 3; i++)

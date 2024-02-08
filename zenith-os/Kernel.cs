@@ -7,7 +7,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using zenithos.Controls;
 using zenithos.Windows;
+using System.Linq;
 using Sys = Cosmos.System;
+using Cosmos.Core.Memory;
 
 namespace zenithos
 {
@@ -34,6 +36,9 @@ namespace zenithos
         {
             canv.DrawFilledRectangle(bgCol, 0, 0, (int)canv.Mode.Width, 30);
             mainButton.Update(0, 0);
+            string time = DateTime.Now.ToString("dddd, MMM d, yyyy. HH:mm");
+            canv.DrawString(time, defFont, textColDark, (int)canv.Mode.Width - 20 - defFont.Width * time.Length, 10);
+            canv.DrawString(activeIndex != -1 && windows.Count != 0 && activeIndex < windows.Count ? windows[activeIndex].title:"",defFont,textColDark,70,10);
         }
 
         void DrawMainBar()
@@ -50,6 +55,7 @@ namespace zenithos
                     break;
                 }
             }
+           
         }
 
         class Application
@@ -77,7 +83,7 @@ namespace zenithos
 
             applications.Add(new Application(() => new Calc(), "Calculator"));
             applications.Add(new Application(() => new TestWindow(), "Test Window"));
-
+            applications.Add(new Application(() => new Windows.Power(), "Power..."));
            
             for (int i = 0; i < applications.Count; i++)
             {
@@ -132,6 +138,7 @@ namespace zenithos
 
             DrawCursor(MouseManager.X,MouseManager.Y, Color.White);
             canv.Display();
+            Heap.Collect();
         }
     }
 }
