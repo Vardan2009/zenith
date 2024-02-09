@@ -1,5 +1,6 @@
 ﻿
 using Cosmos.System.Graphics;
+using IL2CPU.API.Attribs;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -17,8 +18,14 @@ namespace zenithos.Windows
         string operation = null;
         bool changingSecond = false;
         bool expanded = false;
+
+        [ManifestResourceStream(ResourceName = "zenithos.Resource.Applogos.calc.bmp")]
+        static byte[] logoBytes;
+
+
         public Calc() : base(100, 100, 240, 270, "Calculator", Kernel.defFont)
         {
+            logo =  new Bitmap(logoBytes);
             int e = 1;
             for(int i =0;i < 3; i++)
             {
@@ -41,7 +48,7 @@ namespace zenithos.Windows
             cButton = new Button("C", 20, 200, Kernel.textColDark, Kernel.defFont, 15);
             controls.Add(new Button("0", 70, 200, Kernel.textColDark, Kernel.defFont, 15));
             result = new Label("", 20, 20, Kernel.defFont, Kernel.textColDark);
-            sqrtButton = new Button("SQRT", 220, 50, Kernel.textColDark, Kernel.defFont, 15);
+            sqrtButton = new Button("sqrt", 220, 50, Kernel.textColDark, Kernel.defFont, 15);
             controls.Add(sqrtButton);
             additionalButtons.Add(sqrtButton);
             controls.Add(plusButton);
@@ -69,11 +76,11 @@ namespace zenithos.Windows
                     {
                         if(changingSecond)
                         {
-                            second = Convert.ToInt32(second.ToString() + buttons[i][j].Text);
+                            second = Convert.ToDouble(second.ToString() + buttons[i][j].Text);
                         }
                         else
                         {
-                            first = Convert.ToInt32(first.ToString() + buttons[i][j].Text);
+                            first = Convert.ToDouble(first.ToString() + buttons[i][j].Text);
                         }
                     }
                 }

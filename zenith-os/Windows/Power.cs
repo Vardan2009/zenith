@@ -1,5 +1,4 @@
 ﻿using Cosmos.System.Graphics;
-using Cosmos.System.Graphics.Fonts;
 using zenithos.Controls;
 
 namespace zenithos.Windows
@@ -7,7 +6,7 @@ namespace zenithos.Windows
     internal class Power : Window
     {
         public Button shutdownButton, restartButton;
-        public Power() : base(0, 0, 140, 90, "Power", Kernel.defFont, false)
+        public Power() : base(0, 0, 140, 90, "Power...", Kernel.defFont, false)
         {
             x = (int)Kernel.canv.Mode.Width / 2 - 140 / 2;
             y = (int)Kernel.canv.Mode.Height / 2 - 90 / 2;

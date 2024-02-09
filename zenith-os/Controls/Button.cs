@@ -15,7 +15,12 @@ namespace zenithos.Controls
         bool mD, lmD;
         VBECanvas canv;
         int _pX, _pY;
-        public Button(string text, int x, int y, Color color, Font font, int padding = 5)
+        Bitmap image;
+        int height;
+
+        
+
+        public Button(string text, int x, int y, Color color, Font font, int padding = 5,Bitmap image = null)
         {
             Text = text;
             this.x = x;
@@ -24,6 +29,7 @@ namespace zenithos.Controls
             this.font = font;
             this.padding = padding;
             canv = Kernel.canv;
+            this.image = image;
         }
         public override void Update(int pX, int pY)
         {
@@ -35,26 +41,36 @@ namespace zenithos.Controls
             bool mD = MouseManager.MouseState == MouseState.Left;
             clicked = Clicked(mX, mY, mD);
             clickedOnce = Clicked(mX, mY, !mD && lmD);
+
+            int imagewidth = image != null ? (int)image.Width+5 : 0;
+            height = image!=null? (font.Height>=(int)image.Height? (int)image.Height:font.Height) : font.Height;
+
             if (clickedOnce)
             {
-                canv.DrawFilledRectangle(color, x+pX, y + pY, font.Width * Text.Length + padding * 2, font.Height + padding * 2);
+                canv.DrawFilledRectangle(color, x+pX, y + pY, font.Width * Text.Length + padding * 2+imagewidth, height + padding * 2);
             }
             else if (clicked)
             {
-                canv.DrawFilledRectangle(Color.FromArgb(color.R / 2, color.G / 2, color.B / 2), x + pX, y + pY, font.Width * Text.Length + padding * 2, font.Height + padding * 2);
-                canv.DrawString(Text, font, color, x + padding+pX, y + padding+pY);
+                canv.DrawFilledRectangle(Color.FromArgb(color.R / 2, color.G / 2, color.B / 2), x + pX, y + pY, font.Width * Text.Length + padding * 2+imagewidth, height + padding * 2);
+                canv.DrawString(Text, font, color, x + padding+pX+imagewidth, y + padding+pY);
             }
             else
             {
-                canv.DrawRectangle(color, x + pX, y + pY, font.Width * Text.Length + padding * 2, font.Height + padding * 2);
-                canv.DrawString(Text, font, color, x + padding+pX, y + padding+pY);
+                canv.DrawRectangle(color, x + pX, y + pY, font.Width * Text.Length + padding * 2+imagewidth, height + padding * 2);
+                canv.DrawString(Text, font, color, x + padding+pX+imagewidth, y + padding+pY);
             }
+
+            if(image!=null)
+            {
+                canv.DrawImageAlpha(image, x + padding/2 + pX, y + padding + pY);
+            }
+
             lmD = mD;
         }
         public bool Clicked(int mX, int mY, bool mD)
         {
             if (mX >= x+_pX && mX <= x + (font.Width * Text.Length) + (padding * 2)+_pX &&
-                mY >= y+_pY && mY <= y + font.Height + (padding * 2) + _pY)
+                mY >= y+_pY && mY <= y + height + (padding * 2) + _pY)
             {
                 if (mD)
                 {

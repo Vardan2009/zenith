@@ -23,12 +23,22 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Resource\Applogos\calc.bmp" />
+      <None Remove="Resource\Applogos\gear.bmp" />
       <None Remove="Resource\blue.bmp" />
       <None Remove="Resource\blue.png" />
+      <None Remove="Resource\cur.bmp" />
+      <None Remove="Resource\error.bmp" />
+      <None Remove="Resource\startup.wav" />
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Include="Resource\Applogos\calc.bmp" />
+      <EmbeddedResource Include="Resource\Applogos\gear.bmp" />
       <EmbeddedResource Include="Resource\blue.bmp" />
+      <EmbeddedResource Include="Resource\cur.bmp" />
+      <EmbeddedResource Include="Resource\error.bmp" />
+      <EmbeddedResource Include="Resource\startup.wav" />
     </ItemGroup>
 
     <ItemGroup>

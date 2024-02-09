@@ -10,6 +10,9 @@ using zenithos.Windows;
 using System.Linq;
 using Sys = Cosmos.System;
 using Cosmos.Core.Memory;
+using Cosmos.HAL.Drivers.Audio;
+using Cosmos.System.Audio.IO;
+using Cosmos.System.Audio;
 
 namespace zenithos
 {
@@ -27,10 +30,18 @@ namespace zenithos
         Button mainButton;
         public static int activeIndex = -1;
         bool mainBar;
-        [ManifestResourceStream(ResourceName = "zenithos.Resource.blue.bmp")]
-        static byte[] bgImage;
 
-        Bitmap bg;
+        [ManifestResourceStream(ResourceName = "zenithos.Resource.blue.bmp")]
+        static byte[] bgBytes;
+
+        [ManifestResourceStream(ResourceName = "zenithos.Resource.cur.bmp")]
+        static byte[] curBytes;
+
+      
+        [ManifestResourceStream(ResourceName = "zenithos.Resource.startup.wav")]
+        static byte[] sampleAudioBytes;
+
+        public static Bitmap bg,cursor;
 
         void DrawTopbar()
         {
@@ -61,16 +72,20 @@ namespace zenithos
         class Application
         {
             public Func<Window> constructor;
+            public Bitmap logo;
             public string name;
-            public Application(Func<Window> constructor, string name)
+            public Application(Func<Window> constructor, string name,Bitmap logo)
             {
                 this.constructor = constructor;
                 this.name = name;
+                this.logo = logo;
             }
         }
 
         protected override void BeforeRun()
         {
+
+
             canv = new VBECanvas();
             defFont = PCScreenFont.Default;
             MouseManager.ScreenWidth = canv.Mode.Width;
@@ -79,24 +94,42 @@ namespace zenithos
             MouseManager.Y = MouseManager.ScreenHeight / 2;
 
             mainButton = new Button("Zenith", 0, 0, textColDark, defFont);
-            bg = new Bitmap(bgImage);
+            bg = new Bitmap(bgBytes);
+            cursor = new Bitmap(curBytes);
+            
 
-            applications.Add(new Application(() => new Calc(), "Calculator"));
-            applications.Add(new Application(() => new TestWindow(), "Test Window"));
-            applications.Add(new Application(() => new Windows.Power(), "Power..."));
+            applications.Add(new Application(() => new Calc(), "Calculator",new Calc().logo));
+            applications.Add(new Application(() => new TestWindow(), "Test Window",new TestWindow().logo));
+            applications.Add(new Application(() => new Windows.Power(), "Power...",new Windows.Power().logo));
            
             for (int i = 0; i < applications.Count; i++)
             {
-                applicationsButtons.Add(new Button(applications[i].name, 20, 20 + i * 30, textColDark, defFont));
+                applicationsButtons.Add(new Button(applications[i].name, 20, 20 + i * 30, textColDark, defFont, 5, applications[i].logo));
             }
+            var mixer = new AudioMixer();
+            var audioStream = MemoryAudioStream.FromWave(sampleAudioBytes);
+            try
+            {
+                var driver = AC97.Initialize(bufferSize: 4096);
+            }
+            catch(Exception ex)
+            {
+                windows.Add(new Error("Audio Driver Initialization Error", "Failed to initialize AC97 driver!\nMessage: "+ex.Message));
+            }
+
         }
 
-        public void DrawCursor(uint x, uint y, Color col)
+        public void DrawCursor(uint x, uint y)
         {
             int xPos = (int)x;
             int yPos = (int)y;
 
-            for (int i = xPos - 5; i <= xPos + 5; i++)
+            if(yPos>canv.Mode.Height- 16)
+            {
+                yPos = (int)canv.Mode.Height - 16;
+            }
+
+            /*for (int i = xPos - 5; i <= xPos + 5; i++)
             {
                 if (i >= 0 && i < canv.Mode.Width && yPos >= 0 && yPos < canv.Mode.Width)
                     canv.DrawPoint(col, i, yPos);
@@ -106,11 +139,13 @@ namespace zenithos
             {
                 if (j >= 0 && j < canv.Mode.Width && xPos >= 0 && xPos < canv.Mode.Width)
                     canv.DrawPoint(col, xPos, j);
-            }
+            }*/
+            canv.DrawImageAlpha(cursor, xPos, yPos);
         }
         
         protected override void Run()
         {
+            
             canv.Clear();
             canv.DrawImage(bg, 0, 0);
             DrawTopbar();
@@ -136,7 +171,7 @@ namespace zenithos
 
             if (mainBar) DrawMainBar();
 
-            DrawCursor(MouseManager.X,MouseManager.Y, Color.White);
+            DrawCursor(MouseManager.X,MouseManager.Y);
             canv.Display();
             Heap.Collect();
         }
