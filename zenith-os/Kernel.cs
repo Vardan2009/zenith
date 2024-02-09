@@ -37,11 +37,13 @@ namespace zenithos
         [ManifestResourceStream(ResourceName = "zenithos.Resource.cur.bmp")]
         static byte[] curBytes;
 
+        [ManifestResourceStream(ResourceName ="zenithos.Resource.zenith.bmp")]
+        static byte[] logoBytes;
       
         [ManifestResourceStream(ResourceName = "zenithos.Resource.startup.wav")]
         static byte[] sampleAudioBytes;
 
-        public static Bitmap bg,cursor;
+        public static Bitmap bg,cursor,logo;
 
         void DrawTopbar()
         {
@@ -49,15 +51,15 @@ namespace zenithos
             mainButton.Update(0, 0);
             string time = DateTime.Now.ToString("dddd, MMM d, yyyy. HH:mm");
             canv.DrawString(time, defFont, textColDark, (int)canv.Mode.Width - 20 - defFont.Width * time.Length, 10);
-            canv.DrawString(activeIndex != -1 && windows.Count != 0 && activeIndex < windows.Count ? windows[activeIndex].title:"",defFont,textColDark,70,10);
+            canv.DrawString(activeIndex != -1 && windows.Count != 0 && activeIndex < windows.Count ? windows[activeIndex].title:"",defFont,textColDark,120,10);
         }
 
         void DrawMainBar()
         {
-            canv.DrawFilledRectangle(bgCol, 0, 30, 300, 300);
+            canv.DrawFilledRectangle(bgCol, 10, 40, 300, 300);
             for(int i =0;i<applicationsButtons.Count;i++)
             {
-                applicationsButtons[i].Update(0, 30);
+                applicationsButtons[i].Update(10, 40);
                 if (applicationsButtons[i].clickedOnce)
                 {
                     Window instance = applications[i].constructor();
@@ -93,18 +95,21 @@ namespace zenithos
             MouseManager.X = MouseManager.ScreenWidth / 2;
             MouseManager.Y = MouseManager.ScreenHeight / 2;
 
-            mainButton = new Button("Zenith", 0, 0, textColDark, defFont);
             bg = new Bitmap(bgBytes);
             cursor = new Bitmap(curBytes);
-            
+            logo = new Bitmap(logoBytes);
+
+            mainButton = new Button("Zenith", 0, 0, textColDark, defFont,7,logo);
+          
 
             applications.Add(new Application(() => new Calc(), "Calculator",new Calc().logo));
             applications.Add(new Application(() => new TestWindow(), "Test Window",new TestWindow().logo));
-            applications.Add(new Application(() => new Windows.Power(), "Power...",new Windows.Power().logo));
+            applications.Add(new Application(() => new About(), "About Zenith...", new About().logo));
+            applications.Add(new Application(() => new Windows.Power(), "Power...",new Windows.Power().logo)); 
            
             for (int i = 0; i < applications.Count; i++)
             {
-                applicationsButtons.Add(new Button(applications[i].name, 20, 20 + i * 30, textColDark, defFont, 5, applications[i].logo));
+                applicationsButtons.Add(new Button(applications[i].name, 30, 40 + i * 60, textColDark, defFont, 10, applications[i].logo));
             }
             var mixer = new AudioMixer();
             var audioStream = MemoryAudioStream.FromWave(sampleAudioBytes);
@@ -114,7 +119,7 @@ namespace zenithos
             }
             catch(Exception ex)
             {
-                windows.Add(new Error("Audio Driver Initialization Error", "Failed to initialize AC97 driver!\nMessage: "+ex.Message));
+                windows.Add(new Error("Audio Driver Initialization Error", ex.Message));
             }
 
         }

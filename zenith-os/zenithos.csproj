@@ -30,6 +30,8 @@
       <None Remove="Resource\cur.bmp" />
       <None Remove="Resource\error.bmp" />
       <None Remove="Resource\startup.wav" />
+      <None Remove="Resource\zenith.bmp" />
+      <None Remove="Resource\zenithtext.bmp" />
     </ItemGroup>
 
     <ItemGroup>
@@ -39,6 +41,8 @@
       <EmbeddedResource Include="Resource\cur.bmp" />
       <EmbeddedResource Include="Resource\error.bmp" />
       <EmbeddedResource Include="Resource\startup.wav" />
+      <EmbeddedResource Include="Resource\zenith.bmp" />
+      <EmbeddedResource Include="Resource\zenithtext.bmp" />
     </ItemGroup>
 
     <ItemGroup>

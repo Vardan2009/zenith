@@ -17,7 +17,7 @@ namespace zenithos.Windows
         public bool dragging;
         public bool startDrag;
         public bool resizing;
-        const int window_titlebarsize = 30;
+        protected const int window_titlebarsize = 30;
         bool lmD;
         public List<Control> controls = new();
         public bool resizable = false;
@@ -42,6 +42,12 @@ namespace zenithos.Windows
             logo = new Bitmap(gearBytes);
         }
 
+        public void Close()
+        {
+            Kernel.activeIndex = -1;
+            Kernel.windows.Remove(this);
+        }
+
         public virtual void Update(VBECanvas canv, int mX, int mY, bool mD, int dmX, int dmY)
         {
             if (Clicked(mX, mY, mD && !lmD))
@@ -58,8 +64,7 @@ namespace zenithos.Windows
 
             if (closeButton.clickedOnce)
             {
-                Kernel.activeIndex = -1;
-                Kernel.windows.Remove(this);
+                Close();
             }
 
             if (resizing)
@@ -82,7 +87,7 @@ namespace zenithos.Windows
                
                 canv.DrawFilledRectangle(Kernel.highlightCol, x, y, w, window_titlebarsize);
                 canv.DrawRectangle(Kernel.highlightCol, x, y + window_titlebarsize, w, h);
-                canv.DrawString(title, font, Kernel.textColLight, x + 40, y + 10);
+                canv.DrawString(title, font, Kernel.textColLight, x + (int)logo.Width+20, y + 10);
             }
             else
             {
@@ -90,7 +95,7 @@ namespace zenithos.Windows
                 canv.DrawFilledRectangle(Kernel.bgCol, x, y, w, window_titlebarsize);
                 canv.DrawRectangle(Kernel.textColLight, x, y + window_titlebarsize, w, h);
                 canv.DrawRectangle(Kernel.highlightCol, x, y, w, window_titlebarsize);
-                canv.DrawString(title, font, Kernel.highlightCol, x + 40, y + 10);
+                canv.DrawString(title, font, Kernel.highlightCol, x + (int)logo.Width + 20, y + 10);
             }
             canv.DrawImageAlpha(logo, x + 10, y + 5);
             if (dragging)

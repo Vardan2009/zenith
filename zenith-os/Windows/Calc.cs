@@ -14,7 +14,7 @@ namespace zenithos.Windows
         public List<Button> additionalButtons = new();
         public Button plusButton, minusButton, mulButton, divButton,eqButton,cButton,expandButton,sqrtButton;
         public Label result;
-        double first, second;
+        string first, second;
         string operation = null;
         bool changingSecond = false;
         bool expanded = false;
@@ -66,126 +66,135 @@ namespace zenithos.Windows
         }
         public override void Update(VBECanvas canv, int mX, int mY, bool mD, int dmX, int dmY)
         {
-            base.Update(canv, mX, mY, mD, dmX, dmY);
+            try {
+                
+               base.Update(canv, mX, mY, mD, dmX, dmY);
+           
+               for (int i = 0; i < 3; i++)
+               {
+                   for (int j = 0; j < 3; j++)
+                   {
+                       if (buttons[i][j].clickedOnce)
+                       {
+                           if (changingSecond)
+                           {
+                               second = first+buttons[i][j].Text;
+                           }
+                           else
+                           {
+                               first = first+buttons[i][j].Text;
+                           }
+                       }
+                   }
+               }
+           
+           if (expandButton.clickedOnce)
+           {
+               expanded = !expanded;
+               if (expanded)
+               {
+                   w = 240 + 50;
+                   expandButton.Text = "<";
+                   foreach (Button b in additionalButtons)
+                   {
+                       b.Visible = true;
+                   }
+               }
+               else
+               {
+                   w = 240;
+                   expandButton.Text = ">";
+                   foreach (Button b in additionalButtons)
+                   {
+                       b.Visible = false;
+                   }
+               }
+           }
 
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    if (buttons[i][j].clickedOnce)
-                    {
-                        if(changingSecond)
-                        {
-                            second = Convert.ToDouble(second.ToString() + buttons[i][j].Text);
-                        }
-                        else
-                        {
-                            first = Convert.ToDouble(first.ToString() + buttons[i][j].Text);
-                        }
-                    }
-                }
-            }
+           if (changingSecond)
+           {
+               result.Text = second;
+           }
+           else
+           {
+               result.Text = first;
+           }
+          
+           if (sqrtButton.clickedOnce)
+           {
+               if (changingSecond)
+               {
+                   second = Math.Sqrt(Convert.ToDouble(second)).ToString();
+               }
+               else
+               {
+                   first = Math.Sqrt(Convert.ToDouble(first)).ToString();
+               }
+           }
 
-            if(expandButton.clickedOnce)
-            {
-                expanded = !expanded;
-                if (expanded)
-                {
-                    w = 240 + 50;
-                    expandButton.Text = "<";
-                    foreach (Button b in additionalButtons)
-                    {
-                        b.Visible = true;
-                    }
-                }
-                else
-                {
-                    w = 240;
-                    expandButton.Text = ">";
-                    foreach (Button b in additionalButtons)
-                    {
-                        b.Visible = false;
-                    }
-                }
-            }
+           if (cButton.clickedOnce)
+           {
+               first = "0";
+               second = "0";
+               operation = null;
+               changingSecond = false;
+           }
 
-            if(changingSecond)
-            {
-                result.Text = second.ToString();
-            }
-            else
-            {
-                result.Text = first.ToString();
-            }
+           if (plusButton.clickedOnce)
+           {
+               operation = "+";
+               changingSecond = true;
+           }
 
-            if(sqrtButton.clickedOnce)
-            {
-                if(changingSecond)
-                {
-                    second = Math.Sqrt(second);
-                }
-                else
-                {
-                    first = Math.Sqrt(first);
-                }
-            }
+           if (minusButton.clickedOnce)
+           {
+               operation = "-";
+               changingSecond = true;
+           }
 
-            if (cButton.clickedOnce)
-            {
-                first = 0;
-                second = 0;
-                operation = null;
-                changingSecond = false;
-            }
+           if (mulButton.clickedOnce)
+           {
+               operation = "*";
+               changingSecond = true;
+           }
+           if (divButton.clickedOnce)
+           {
+               operation = "/";
+               changingSecond = true;
+           }
 
-            if(plusButton.clickedOnce)
-            {
-                operation = "+";
-                changingSecond = true;
-            }
-
-            if (minusButton.clickedOnce)
-            {
-                operation = "-";
-                changingSecond = true;
-            }
-
-            if (mulButton.clickedOnce)
-            {
-                operation = "*";
-                changingSecond = true;
-            }
-            if(divButton.clickedOnce)
-            {
-                operation = "/";
-                changingSecond = true;
-            }
-
-            if (eqButton.clickedOnce)
-            {
-                if (operation != null)
-                {
-                    double result = 0;
-                    switch (operation)
-                    {
-                        case "+":
-                            result = first + second;
-                            break;
-                        case "-":
-                            result = first - second;
-                            break;
-                        case "*":
-                            result = first * second;
-                            break;
-                        case "/":
-                            result = first / second;
-                            break;
-                    }
-                    second = 0;
-                    changingSecond = false;
-                    first = result;
-                }
-            }
+           if (eqButton.clickedOnce)
+           {
+               if (operation != null)
+               {
+                   double result = 0;
+                   double firstD = Convert.ToDouble(first);
+                   double secondD = Convert.ToDouble(second);
+                   switch (operation)
+                   {
+                       case "+":
+                           result = firstD + secondD;
+                           break;
+                       case "-":
+                           result = firstD - secondD;
+                           break;
+                       case "*":
+                           result = firstD * secondD;
+                           break;
+                       case "/":
+                           result = firstD / secondD;
+                           break;
+                   }
+                   second = "0";
+                   changingSecond = false;
+                   first = result.ToString();
+               }
+           }
+       }catch(Exception ex)
+       {
+           Kernel.windows.Add(new Error("[Calc] Error", ex.Message));
+           Close();
+       }
         }
     }
 }
