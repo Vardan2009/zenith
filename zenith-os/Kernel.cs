@@ -51,12 +51,12 @@ namespace zenithos
             mainButton.Update(0, 0);
             string time = DateTime.Now.ToString("dddd, MMM d, yyyy. HH:mm");
             canv.DrawString(time, defFont, textColDark, (int)canv.Mode.Width - 20 - defFont.Width * time.Length, 10);
-            canv.DrawString(activeIndex != -1 && windows.Count != 0 && activeIndex < windows.Count ? windows[activeIndex].title:"",defFont,textColDark,120,10);
+            canv.DrawString(activeIndex != -1 && windows.Count != 0 && activeIndex < windows.Count ? windows[activeIndex].title:"",defFont,textColDark,170,8);
         }
 
         void DrawMainBar()
         {
-            canv.DrawFilledRectangle(bgCol, 10, 40, 300, 300);
+            canv.DrawFilledRectangle(bgCol, 10, 40, 300, 500);
             for(int i =0;i<applicationsButtons.Count;i++)
             {
                 applicationsButtons[i].Update(10, 40);
@@ -104,8 +104,10 @@ namespace zenithos
 
             applications.Add(new Application(() => new Calc(), "Calculator",new Calc().logo));
             applications.Add(new Application(() => new TestWindow(), "Test Window",new TestWindow().logo));
+            applications.Add(new Application(() => new UITest(), "UI Test", new UITest().logo));
             applications.Add(new Application(() => new About(), "About Zenith...", new About().logo));
-            applications.Add(new Application(() => new Windows.Power(), "Power...",new Windows.Power().logo)); 
+            applications.Add(new Application(() => new Windows.Power(), "Power...",new Windows.Power().logo));
+            
            
             for (int i = 0; i < applications.Count; i++)
             {

@@ -78,7 +78,7 @@ namespace zenithos.Windows
                        {
                            if (changingSecond)
                            {
-                               second = first+buttons[i][j].Text;
+                               second = second+buttons[i][j].Text;
                            }
                            else
                            {
@@ -134,8 +134,8 @@ namespace zenithos.Windows
 
            if (cButton.clickedOnce)
            {
-               first = "0";
-               second = "0";
+               first = "";
+               second = "";
                operation = null;
                changingSecond = false;
            }
@@ -185,9 +185,10 @@ namespace zenithos.Windows
                            result = firstD / secondD;
                            break;
                    }
-                   second = "0";
+                   second = "";
                    changingSecond = false;
                    first = result.ToString();
+                   operation = null;
                }
            }
        }catch(Exception ex)
