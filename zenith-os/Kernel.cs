@@ -113,10 +113,11 @@ namespace zenithos
             {
                 applicationsButtons.Add(new Button(applications[i].name, 30, 40 + i * 60, textColDark, defFont, 10, applications[i].logo));
             }
-            var mixer = new AudioMixer();
-            var audioStream = MemoryAudioStream.FromWave(sampleAudioBytes);
+
             try
             {
+                var mixer = new AudioMixer();
+                var audioStream = MemoryAudioStream.FromWave(sampleAudioBytes);
                 var driver = AC97.Initialize(bufferSize: 4096);
             }
             catch(Exception ex)
