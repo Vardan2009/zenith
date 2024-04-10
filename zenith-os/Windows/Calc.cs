@@ -11,16 +11,17 @@ namespace zenithos.Windows
     internal class Calc : Window
     {
         public List<List<Button>> buttons = new();
+
         public List<Button> additionalButtons = new();
         public Button plusButton, minusButton, mulButton, divButton,eqButton,cButton,expandButton,sqrtButton;
         public Label result;
-        string first, second;
+        string firstNumber, secondNumber;
         string operation = null;
-        bool changingSecond = false;
+        bool isModifyingSecondField = false;
         bool expanded = false;
 
         [ManifestResourceStream(ResourceName = "zenithos.Resource.Applogos.calc.bmp")]
-        static byte[] logoBytes;
+        readonly static byte[] logoBytes;
 
 
         public Calc() : base(100, 100, 240, 270, "Calculator", Kernel.defFont)
@@ -39,6 +40,13 @@ namespace zenithos.Windows
                 }
                 buttons.Add(cur);
             }
+            Button zeroButton = new Button("0", 70, 200, Kernel.textColDark, Kernel.defFont, 15);
+            controls.Add(zeroButton);
+            List<Button> last = new()
+            {
+              zeroButton
+            };
+            buttons.Add(last);
             plusButton = new Button("+",170,50,Kernel.textColDark, Kernel.defFont, 15);
             minusButton = new Button("-", 170, 100, Kernel.textColDark, Kernel.defFont, 15);
             mulButton = new Button("*", 170, 150,Kernel.textColDark, Kernel.defFont,15);
@@ -46,7 +54,6 @@ namespace zenithos.Windows
             expandButton = new Button(">", 190, 20, Kernel.textColDark, Kernel.defFont, 5);
             eqButton = new Button("=", 120, 200, Kernel.textColDark, Kernel.defFont, 15);
             cButton = new Button("C", 20, 200, Kernel.textColDark, Kernel.defFont, 15);
-            controls.Add(new Button("0", 70, 200, Kernel.textColDark, Kernel.defFont, 15));
             result = new Label("", 20, 20, Kernel.defFont, Kernel.textColDark);
             sqrtButton = new Button("sqrt", 220, 50, Kernel.textColDark, Kernel.defFont, 15);
             controls.Add(sqrtButton);
@@ -70,19 +77,19 @@ namespace zenithos.Windows
                 
                base.Update(canv, mX, mY, mD, dmX, dmY);
            
-               for (int i = 0; i < 3; i++)
+               for (int i = 0; i < buttons.Count; i++)
                {
-                   for (int j = 0; j < 3; j++)
+                   for (int j = 0; j < buttons[i].Count; j++)
                    {
                        if (buttons[i][j].clickedOnce)
                        {
-                           if (changingSecond)
+                           if (isModifyingSecondField)
                            {
-                               second = second+buttons[i][j].Text;
+                               secondNumber += buttons[i][j].Text;
                            }
                            else
                            {
-                               first = first+buttons[i][j].Text;
+                               firstNumber += buttons[i][j].Text;
                            }
                        }
                    }
@@ -111,56 +118,51 @@ namespace zenithos.Windows
                }
            }
 
-           if (changingSecond)
-           {
-               result.Text = second;
-           }
-           else
-           {
-               result.Text = first;
-           }
+           
+           result.Text = isModifyingSecondField?$"{firstNumber} {operation} {secondNumber}":firstNumber;
+          
           
            if (sqrtButton.clickedOnce)
            {
-               if (changingSecond)
+               if (isModifyingSecondField)
                {
-                   second = Math.Sqrt(Convert.ToDouble(second)).ToString();
+                   secondNumber = Math.Sqrt(Convert.ToDouble(secondNumber)).ToString();
                }
                else
                {
-                   first = Math.Sqrt(Convert.ToDouble(first)).ToString();
+                   firstNumber = Math.Sqrt(Convert.ToDouble(firstNumber)).ToString();
                }
            }
 
            if (cButton.clickedOnce)
            {
-               first = "";
-               second = "";
+               firstNumber = "";
+               secondNumber = "";
                operation = null;
-               changingSecond = false;
+               isModifyingSecondField = false;
            }
 
            if (plusButton.clickedOnce)
            {
                operation = "+";
-               changingSecond = true;
+               isModifyingSecondField = true;
            }
 
            if (minusButton.clickedOnce)
            {
                operation = "-";
-               changingSecond = true;
+               isModifyingSecondField = true;
            }
 
            if (mulButton.clickedOnce)
            {
                operation = "*";
-               changingSecond = true;
+               isModifyingSecondField = true;
            }
            if (divButton.clickedOnce)
            {
                operation = "/";
-               changingSecond = true;
+               isModifyingSecondField = true;
            }
 
            if (eqButton.clickedOnce)
@@ -168,8 +170,8 @@ namespace zenithos.Windows
                if (operation != null)
                {
                    double result = 0;
-                   double firstD = Convert.ToDouble(first);
-                   double secondD = Convert.ToDouble(second);
+                   double firstD = Convert.ToDouble(firstNumber);
+                   double secondD = Convert.ToDouble(secondNumber);
                    switch (operation)
                    {
                        case "+":
@@ -182,12 +184,18 @@ namespace zenithos.Windows
                            result = firstD * secondD;
                            break;
                        case "/":
+                                if(secondD == 0)
+                                {
+                                    Kernel.windows.Add(new Error("Calculator ", "no... just no"));
+                                    result = 0;
+                                    return;
+                                }
                            result = firstD / secondD;
                            break;
                    }
-                   second = "";
-                   changingSecond = false;
-                   first = result.ToString();
+                   secondNumber = "";
+                   isModifyingSecondField = false;
+                   firstNumber = result.ToString();
                    operation = null;
                }
            }

@@ -12,7 +12,7 @@ namespace zenithos.Controls
         public Font font;
         public int padding;
         public bool clicked, clickedOnce;
-        bool mD, lmD;
+        bool lmD;
         VBECanvas canv;
         int _pX, _pY;
         Bitmap image;

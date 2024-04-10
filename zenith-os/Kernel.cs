@@ -18,10 +18,10 @@ namespace zenithos
 {
     public class Kernel : Sys.Kernel
     {
-        public static Color bgCol = Color.FromArgb(37, 45, 51);
-        public static Color highlightCol = Color.FromArgb(16, 136, 227);
-        public static Color textColLight = Color.FromArgb(29, 30, 31);
-        public static Color textColDark = Color.FromArgb(200, 200, 204);
+        public static readonly Color bgCol = Color.FromArgb(31, 32, 33);
+        public static readonly Color highlightCol = Color.FromArgb(16, 136, 227);
+        public static readonly Color textColLight = Color.FromArgb(29, 30, 31);
+        public static readonly Color textColDark = Color.FromArgb(200, 200, 204);
         public static VBECanvas canv;
         public static Font defFont;
         public static List<Window> windows = new();
@@ -32,16 +32,16 @@ namespace zenithos
         bool mainBar;
 
         [ManifestResourceStream(ResourceName = "zenithos.Resource.blue.bmp")]
-        static byte[] bgBytes;
+        static readonly byte[] bgBytes;
 
         [ManifestResourceStream(ResourceName = "zenithos.Resource.cur.bmp")]
-        static byte[] curBytes;
+        static readonly byte[] curBytes;
 
         [ManifestResourceStream(ResourceName ="zenithos.Resource.zenith.bmp")]
-        static byte[] logoBytes;
+        static readonly byte[] logoBytes;
       
         [ManifestResourceStream(ResourceName = "zenithos.Resource.startup.wav")]
-        static byte[] sampleAudioBytes;
+        static readonly byte[] sampleAudioBytes;
 
         public static Bitmap bg,cursor,logo;
 
