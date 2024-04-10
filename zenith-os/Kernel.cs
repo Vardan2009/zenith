@@ -71,6 +71,12 @@ namespace zenithos
            
         }
 
+        public static void ThrowError(string content,string title="Error")
+        {
+            windows.Add(new Error(title,content));
+            activeIndex = windows.Count - 1;
+        }
+
         class Application
         {
             public Func<Window> constructor;
@@ -122,7 +128,7 @@ namespace zenithos
             }
             catch(Exception ex)
             {
-                windows.Add(new Error("Audio Driver Initialization Error", ex.Message));
+                ThrowError(ex.Message, "Audio Driver Initialization Error");
             }
 
         }

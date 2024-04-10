@@ -23,7 +23,7 @@ namespace zenithos.Windows
             }
             if(field1.submittedOnce)
             {
-                Kernel.windows.Add(new Error("Submitted Text...", "Your Input is: " + field1.Value));
+                Kernel.ThrowError("Your Input is: " + field1.Value, "Test");
             }
             
         }

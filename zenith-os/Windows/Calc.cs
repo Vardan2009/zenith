@@ -126,12 +126,32 @@ namespace zenithos.Windows
            {
                if (isModifyingSecondField)
                {
-                   secondNumber = Math.Sqrt(Convert.ToDouble(secondNumber)).ToString();
+                        string last = secondNumber;
+                        double sqrt = Math.Sqrt(Convert.ToDouble(secondNumber));
+                        if(double.IsNaN(sqrt))
+                        {
+                            Kernel.ThrowError("Don't try doing this, you might break something...", "Real Numbers");
+                            secondNumber = last;
+                        }
+                        else
+                        {
+                            secondNumber = sqrt.ToString();
+                        }
                }
                else
                {
-                   firstNumber = Math.Sqrt(Convert.ToDouble(firstNumber)).ToString();
-               }
+                        string last = firstNumber;
+                        double sqrt = Math.Sqrt(Convert.ToDouble(firstNumber));
+                        if (double.IsNaN(sqrt))
+                        {
+                            Kernel.ThrowError("Don't try doing this, you might break something...", "Real Numbers");
+                            firstNumber = last;
+                        }
+                        else
+                        {
+                            firstNumber = sqrt.ToString();
+                        }
+                    }
            }
 
            if (cButton.clickedOnce)
@@ -186,7 +206,7 @@ namespace zenithos.Windows
                        case "/":
                                 if(secondD == 0)
                                 {
-                                    Kernel.windows.Add(new Error("Calculator ", "no... just no"));
+                                    Kernel.ThrowError("no... just no", "Calculator");
                                     result = 0;
                                     return;
                                 }
@@ -201,7 +221,7 @@ namespace zenithos.Windows
            }
        }catch(Exception ex)
        {
-           Kernel.windows.Add(new Error("[Calc] Error", ex.Message));
+                Kernel.ThrowError(ex.Message, "Calculator");
            Close();
        }
         }
