@@ -33,29 +33,29 @@ namespace zenithos.Windows
                 List<Button> cur = new List<Button>();
                 for (int j =0;j < 3; j++)
                 {
-                    Button nw = new(e.ToString(), 20+j * 50, 50+i * 50, Kernel.textColDark, Kernel.defFont, 15);
+                    Button nw = new(e.ToString(), 20+j * 50, 50+i * 50, Kernel.mainCol, Kernel.defFont, 15);
                     controls.Add(nw);
                     cur.Add(nw);
                     e++;
                 }
                 buttons.Add(cur);
             }
-            Button zeroButton = new Button("0", 70, 200, Kernel.textColDark, Kernel.defFont, 15);
+            Button zeroButton = new Button("0",70,200,Kernel.mainCol,Kernel.defFont,15);
             controls.Add(zeroButton);
             List<Button> last = new()
             {
               zeroButton
             };
             buttons.Add(last);
-            plusButton = new Button("+",170,50,Kernel.textColDark, Kernel.defFont, 15);
-            minusButton = new Button("-", 170, 100, Kernel.textColDark, Kernel.defFont, 15);
-            mulButton = new Button("*", 170, 150,Kernel.textColDark, Kernel.defFont,15);
-            divButton = new Button("/", 170, 200,Kernel.textColDark,Kernel.defFont,15);
-            expandButton = new Button(">", 190, 20, Kernel.textColDark, Kernel.defFont, 5);
-            eqButton = new Button("=", 120, 200, Kernel.textColDark, Kernel.defFont, 15);
-            cButton = new Button("C", 20, 200, Kernel.textColDark, Kernel.defFont, 15);
+            plusButton = new Button("+",170,50,Kernel.mainCol, Kernel.defFont, 15);
+            minusButton = new Button("-",170,100,Kernel.mainCol,Kernel.defFont,15);
+            mulButton = new Button("*", 170, 150,Kernel.mainCol, Kernel.defFont,15);
+            divButton = new Button("/", 170, 200,Kernel.mainCol,Kernel.defFont,15);
+            expandButton = new Button(">",190,20,Kernel.mainCol,Kernel.defFont,5);
+            eqButton = new Button("=",120,200,Kernel.mainCol,Kernel.defFont,15);
+            cButton = new Button("C",20,200,Kernel.mainCol,Kernel.defFont,15);
             result = new Label("", 20, 20, Kernel.defFont, Kernel.textColDark);
-            sqrtButton = new Button("sqrt", 220, 50, Kernel.textColDark, Kernel.defFont, 15);
+            sqrtButton = new Button("sqrt",220,50,Kernel.mainCol,Kernel.defFont,15);
             controls.Add(sqrtButton);
             additionalButtons.Add(sqrtButton);
             controls.Add(plusButton);
@@ -151,7 +151,7 @@ namespace zenithos.Windows
                         {
                             firstNumber = sqrt.ToString();
                         }
-                    }
+               }
            }
 
            if (cButton.clickedOnce)

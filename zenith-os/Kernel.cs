@@ -19,8 +19,9 @@ namespace zenithos
     public class Kernel : Sys.Kernel
     {
         public static readonly Color bgCol = Color.FromArgb(31, 32, 33);
+        public static readonly Color mainCol = Color.FromArgb(57, 64, 69);
         public static readonly Color highlightCol = Color.FromArgb(16, 136, 227);
-        public static readonly Color textColLight = Color.FromArgb(29, 30, 31);
+        public static readonly Color textColLight = Color.FromArgb(59, 71, 79);
         public static readonly Color textColDark = Color.FromArgb(200, 200, 204);
         public static VBECanvas canv;
         public static Font defFont;
@@ -56,7 +57,8 @@ namespace zenithos
 
         void DrawMainBar()
         {
-            canv.DrawFilledRectangle(bgCol, 10, 40, 300, 500);
+            canv.DrawFilledRectangle(bgCol, 10, 40, 300, applicationsButtons.Count*50+40);
+            canv.DrawString("Welcome to Zenith!", defFont, textColDark, 40, 70 - defFont.Height);
             for(int i =0;i<applicationsButtons.Count;i++)
             {
                 applicationsButtons[i].Update(10, 40);
@@ -92,8 +94,6 @@ namespace zenithos
 
         protected override void BeforeRun()
         {
-
-
             canv = new VBECanvas();
             defFont = PCScreenFont.Default;
             MouseManager.ScreenWidth = canv.Mode.Width;
@@ -105,7 +105,7 @@ namespace zenithos
             cursor = new Bitmap(curBytes);
             logo = new Bitmap(logoBytes);
 
-            mainButton = new Button("Zenith", 0, 0, textColDark, defFont,7,logo);
+            mainButton = new Button("Zenith", 0, 0, mainCol, defFont,7,logo);
           
 
             applications.Add(new Application(() => new Calc(), "Calculator",new Calc().logo));
@@ -117,7 +117,7 @@ namespace zenithos
            
             for (int i = 0; i < applications.Count; i++)
             {
-                applicationsButtons.Add(new Button(applications[i].name, 30, 40 + i * 60, textColDark, defFont, 10, applications[i].logo));
+                applicationsButtons.Add(new Button(applications[i].name, 30, 40 + i * 50, mainCol, defFont, 10, applications[i].logo,240));
             }
 
             try

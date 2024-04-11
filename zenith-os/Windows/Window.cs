@@ -1,9 +1,9 @@
 ﻿using Cosmos.System.Graphics;
 using Cosmos.System.Graphics.Fonts;
 using IL2CPU.API.Attribs;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Xml.Linq;
 using zenithos.Controls;
 
 namespace zenithos.Windows
@@ -22,7 +22,7 @@ namespace zenithos.Windows
         public List<Control> controls = new();
         public bool resizable = false;
         public Button closeButton;
-
+        int myIndex = -1;
 
         [ManifestResourceStream(ResourceName = "zenithos.Resource.Applogos.gear.bmp")]
         static byte[] gearBytes;
@@ -40,19 +40,55 @@ namespace zenithos.Windows
             this.resizable = resizable;
             closeButton = new Button("X", w - 20 - font.Width, 2, Color.Red, font);
             logo = new Bitmap(gearBytes);
+
+            FixBounds();
+
+         
         }
 
         public void Close()
         {
-            Kernel.activeIndex = -1;
+            if(Kernel.activeIndex == myIndex)
+                Kernel.activeIndex = -1;
             Kernel.windows.Remove(this);
+        }
+
+        void FixBounds()
+        {
+            if (w <= font.Width * title.Length + 60)
+            {
+                w = font.Width * title.Length + 60;
+            }
+            int maxparam = int.MinValue;
+
+            Control MostBottomControl = null;
+
+            int margin = 80;
+
+            foreach (var obj in controls)
+            {
+                if (obj.y + margin > maxparam)
+                {
+                    maxparam = obj.y + margin;
+                    MostBottomControl = obj;
+                }
+            }
+
+            if (h <= MostBottomControl.y + margin)
+            {
+                h = MostBottomControl.y + margin;
+            }
         }
 
         public virtual void Update(VBECanvas canv, int mX, int mY, bool mD, int dmX, int dmY)
         {
+            if(myIndex == -1)
+                myIndex = Kernel.windows.FindIndex(x => x == this);
+
             if (Clicked(mX, mY, mD && !lmD))
             {
-                Kernel.activeIndex = Kernel.windows.FindIndex(x => x == this);
+                if(Kernel.activeIndex != myIndex)
+                    Kernel.activeIndex = myIndex;
                 dragging = true;
             }
             if (ClickedResize(mX, mY, mD && !lmD) && resizable)
@@ -71,14 +107,14 @@ namespace zenithos.Windows
             {
                 w += dmX;
                 h += dmY;
-                if (w <= font.Width * title.Length + 20)
-                {
-                    w = font.Width * title.Length + 20;
-                }
+
+                FixBounds();
+
                 if (!mD)
                 {
                     resizing = false;
                 }
+
             }
             canv.DrawFilledRectangle(Kernel.bgCol, x, y + window_titlebarsize, w, h);
           
