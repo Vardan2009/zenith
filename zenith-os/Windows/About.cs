@@ -19,7 +19,7 @@ namespace zenithos.Windows
             creds = new("Created by", 20, 60, font, Kernel.textColDark);
             creds1 = new("Vardan Petrosyan (Vardan2009)",40,80,font,Kernel.textColDark);
             creds2 = new("Powered with the CosmosOS library DevKit", 20, 100,font, Kernel.textColDark);
-            creds3 = new("ver. v0.0.3", 20, 130, font, Kernel.textColDark);
+            creds3 = new($"ver. {Kernel.version}", 20, 130, font, Kernel.textColDark);
             logoView = new(logoImg, 20, 10);
             controls.Add(creds);
             controls.Add(creds1);
