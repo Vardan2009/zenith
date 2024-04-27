@@ -13,6 +13,7 @@ using Cosmos.Core.Memory;
 using Cosmos.HAL.Drivers.Audio;
 using Cosmos.System.Audio.IO;
 using Cosmos.System.Audio;
+using System.IO;
 
 namespace zenithos
 {
@@ -106,9 +107,10 @@ namespace zenithos
             logo = new Bitmap(logoBytes);
 
             mainButton = new Button("Zenith", 0, 0, mainCol, defFont,7,logo);
-          
 
-            applications.Add(new Application(() => new Calc(), "Calculator",new Calc().logo));
+
+            applications.Add(new Application(() => new Calc(), "Calculator", new Calc().logo));
+            applications.Add(new Application(() => new CalcLegacy(), "Calculator (Legacy)",new CalcLegacy().logo));
             applications.Add(new Application(() => new TestWindow(), "Test Window",new TestWindow().logo));
             applications.Add(new Application(() => new UITest(), "Input Field Test", new UITest().logo));
             applications.Add(new Application(() => new About(), "About Zenith...", new About().logo));

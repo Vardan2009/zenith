@@ -54,4 +54,8 @@
         <PackageReference Include="Cosmos.Plugs" Version="0-*" NoWarn="NU1604" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Resource\Fonts\" />
+    </ItemGroup>
+
 </Project>
