@@ -73,9 +73,9 @@ namespace zenithos
            
         }
 
-        public static void ThrowError(string content,string title="Error")
+        public static void ShowMessage(string content,string title="Message",MsgType type = MsgType.Info)
         {
-            windows.Add(new Error(title,content));
+            windows.Add(new MsgWindow(title,content,type));
             activeIndex = windows.Count - 1;
         }
 
@@ -110,7 +110,7 @@ namespace zenithos
 
             applications.Add(new Application(() => new Calc(), "Calculator",new Calc().logo));
             applications.Add(new Application(() => new TestWindow(), "Test Window",new TestWindow().logo));
-            applications.Add(new Application(() => new UITest(), "UI Test", new UITest().logo));
+            applications.Add(new Application(() => new UITest(), "Input Field Test", new UITest().logo));
             applications.Add(new Application(() => new About(), "About Zenith...", new About().logo));
             applications.Add(new Application(() => new Windows.Power(), "Power...",new Windows.Power().logo));
             
@@ -128,7 +128,7 @@ namespace zenithos
             }
             catch(Exception ex)
             {
-                ThrowError(ex.Message, "Audio Driver Initialization Error");
+                ShowMessage(ex.Message, "Audio Driver Initialization Error",MsgType.Error);
             }
 
         }

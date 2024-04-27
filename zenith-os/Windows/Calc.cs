@@ -130,7 +130,7 @@ namespace zenithos.Windows
                         double sqrt = Math.Sqrt(Convert.ToDouble(secondNumber));
                         if(double.IsNaN(sqrt))
                         {
-                            Kernel.ThrowError("Don't try doing this, you might break something...", "Real Numbers");
+                            Kernel.ShowMessage("Don't try doing this, you might break something...", "Real Numbers",MsgType.Info);
                             secondNumber = last;
                         }
                         else
@@ -144,7 +144,7 @@ namespace zenithos.Windows
                         double sqrt = Math.Sqrt(Convert.ToDouble(firstNumber));
                         if (double.IsNaN(sqrt))
                         {
-                            Kernel.ThrowError("Don't try doing this, you might break something...", "Real Numbers");
+                            Kernel.ShowMessage("Don't try doing this, you might break something...", "Real Numbers", MsgType.Info);
                             firstNumber = last;
                         }
                         else
@@ -206,7 +206,7 @@ namespace zenithos.Windows
                        case "/":
                                 if(secondD == 0)
                                 {
-                                    Kernel.ThrowError("no... just no", "Calculator");
+                                    Kernel.ShowMessage("no... just no", "Calculator", MsgType.Info);
                                     result = 0;
                                     return;
                                 }
@@ -221,7 +221,7 @@ namespace zenithos.Windows
            }
        }catch(Exception ex)
        {
-                Kernel.ThrowError(ex.Message, "Calculator");
+                Kernel.ShowMessage(ex.Message, "Calculator",MsgType.Error);
            Close();
        }
         }

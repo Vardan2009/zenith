@@ -4,12 +4,22 @@ using zenithos.Controls;
 
 namespace zenithos.Windows
 {
-    internal class Error : Window
+    public enum MsgType
+    {
+        Info, Error
+    }
+
+    internal class MsgWindow : Window
     {
         public Label text;
 
         [ManifestResourceStream(ResourceName = "zenithos.Resource.error.bmp")]
-        static byte[] logoBytes;
+        static byte[] errLogoBytes;
+
+        [ManifestResourceStream(ResourceName = "zenithos.Resource.info.bmp")]
+        static byte[] infoLogoBytes;
+
+       
 
         static int GetLineCount(string text)
         {
@@ -28,9 +38,17 @@ namespace zenithos.Windows
             }
         }
 
-        public Error(string title,string err) : base(300,300, 200, 100, title, Kernel.defFont, false)
+        public MsgWindow(string title,string err,MsgType type = MsgType.Info) : base(300,300, 200, 100, title, Kernel.defFont, false)
         {
-            logo = new Cosmos.System.Graphics.Bitmap(logoBytes);
+            switch(type)
+            {
+                case MsgType.Info:
+                    logo = new Cosmos.System.Graphics.Bitmap(infoLogoBytes);
+                    break;
+                case MsgType.Error:
+                    logo = new Cosmos.System.Graphics.Bitmap(errLogoBytes);
+                    break;
+            }
             w = Kernel.defFont.Width * GetLongestString(err,title).Length + 20;
             h = Kernel.defFont.Height * GetLineCount(err) + 20;
             x = (int)Kernel.canv.Mode.Width / 2 - w / 2;
