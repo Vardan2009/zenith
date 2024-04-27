@@ -129,7 +129,7 @@ namespace zenithos
 
                 canv = new VBECanvas();
 
-                bool throwTestError = true;
+                bool throwTestError = false;
                 if (throwTestError) { throw new Exception("This is a test exception"); }
 
                 defFont = PCScreenFont.Default;
