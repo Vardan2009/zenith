@@ -15,7 +15,7 @@ namespace zenithos.Windows
         public List<List<Button>> buttons = new();
 
         public List<Button> additionalButtons = new();
-        public Button plusButton, minusButton, mulButton, divButton, eqButton, cButton, expandButton, sqrtButton,lParenButton,rParenButton;
+        public Button plusButton, minusButton, mulButton,dotButton, divButton, eqButton, cButton, expandButton, sqrtButton,lParenButton,rParenButton;
         public Label result;
 
         public string expression;
@@ -57,9 +57,10 @@ namespace zenithos.Windows
             eqButton = new Button("=", 120, 200, Kernel.mainCol, Kernel.defFont, 15);
             cButton = new Button("C", 20, 200, Kernel.mainCol, Kernel.defFont, 15);
             result = new Label("", 20, 20, Kernel.defFont, Kernel.textColDark);
-            sqrtButton = new Button("√", 220, 50, Kernel.mainCol, Kernel.defFont, 15);
-            lParenButton = new Button("(",220,100,Kernel.mainCol,Kernel.defFont, 15);
-            rParenButton = new Button(")", 220, 150, Kernel.mainCol, Kernel.defFont, 15);
+            sqrtButton = new Button("sqrt", 220, 50, Kernel.mainCol, Kernel.defFont, 15,null,50);
+            lParenButton = new Button("(",220,100,Kernel.mainCol,Kernel.defFont, 15,null,50);
+            rParenButton = new Button(")", 220, 150, Kernel.mainCol, Kernel.defFont, 15,null, 50);
+            dotButton = new Button(".", 220, 200, Kernel.mainCol, Kernel.defFont, 15, null, 50);
 
             controls.AddRange( new Control[]
             {
@@ -73,10 +74,11 @@ namespace zenithos.Windows
                 eqButton,
                 cButton,
                 result,
-                expandButton
+                expandButton,
+                dotButton
             });
 
-            additionalButtons.AddRange(new[] { sqrtButton, lParenButton, rParenButton });
+            additionalButtons.AddRange(new[] { sqrtButton, lParenButton, rParenButton,dotButton });
 
 
             foreach (Button b in additionalButtons)
@@ -131,8 +133,18 @@ namespace zenithos.Windows
 
                 if (sqrtButton.clickedOnce)
                 {
+                    string expression_old = expression;
+                    expression = ExpressionParser.ParseExpression(expression).ToString();
                     double sqrt = Math.Sqrt(Convert.ToDouble(expression));
-                    expression = sqrt.ToString();
+                    if (double.IsNaN(sqrt))
+                    {
+                        Kernel.ShowMessage("Don't try doing this, you might break something...", "Real Numbers", MsgType.Info);
+                        expression = expression_old;
+                    }
+                    else
+                    {
+                        expression = sqrt.ToString();
+                    }
                 }
 
                 if (cButton.clickedOnce)
@@ -142,22 +154,78 @@ namespace zenithos.Windows
 
                 if (plusButton.clickedOnce)
                 {
-                    expression += '+';
+                    if(!expression.EndsWith("+"))
+                    {
+                        if (ExpressionParser.IsOperator(expression[^1]))
+                        {
+                            expression = expression[..^1] + "+";
+                        }
+                        else
+                        {
+                            expression += '+';
+                        }
+                    }
+                    
                 }
 
                 if (minusButton.clickedOnce)
                 {
-                    expression += '-';
+                    if (!expression.EndsWith("-"))
+                    {
+                        if (ExpressionParser.IsOperator(expression[^1]))
+                        {
+                            expression = expression[..^1] + "-";
+                        }
+                        else
+                        {
+                            expression += '-';
+                        }
+                    }
+                }
+
+                if (dotButton.clickedOnce)
+                {
+                    if (!expression.EndsWith("."))
+                    {
+                        if (ExpressionParser.IsOperator(expression[^1]))
+                        {
+                            expression = expression[..^1] + ".";
+                        }
+                        else
+                        {
+                            expression += '.';
+                        }
+                    }
                 }
 
                 if (mulButton.clickedOnce)
                 {
-                    expression += '*';
+                    if (!expression.EndsWith("*"))
+                    {
+                        if (ExpressionParser.IsOperator(expression[^1]))
+                        {
+                            expression = expression[..^1] + "*";
+                        }
+                        else
+                        {
+                            expression += '*';
+                        }
+                    }
                 }
 
                 if (divButton.clickedOnce)
                 {
-                    expression += '/';
+                    if (!expression.EndsWith("/"))
+                    {
+                        if (ExpressionParser.IsOperator(expression[^1]))
+                        {
+                            expression = expression[..^1] + "/";
+                        }
+                        else
+                        {
+                            expression += '/';
+                        }
+                    }
                 }
 
                 if (lParenButton.clickedOnce)

@@ -148,7 +148,7 @@ namespace zenithos.Utils
             return stack.Pop();
         }
 
-        static bool IsOperator(char c)
+        public static bool IsOperator(char c)
         {
             return c == '+' || c == '-' || c == '*' || c == '/';
         }

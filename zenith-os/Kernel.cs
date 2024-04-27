@@ -98,11 +98,12 @@ namespace zenithos
         static void HandleFatalError(Exception e)
         {
             canv.Clear(Color.DarkSlateBlue);
-            Thread.Sleep(50);
+            Thread.Sleep(10);
+            canv.Display();
             string[] lines = {
                  $"--- ZENITH OS {version}",
                  "",
-                 $"The system has encountered a fatal exception",
+                 $"The system has encountered an uncaught fatal exception",
                  "","Message: "
                  ,e.Message,"","Click any key to reboot"
             };
@@ -113,7 +114,8 @@ namespace zenithos
             {
                 canv.DrawString(line, PCScreenFont.Default, Color.White, 10, y);
                 y += PCScreenFont.Default.Height+5;
-                Thread.Sleep(50);
+                Thread.Sleep(10);
+                canv.Display();
             }
 
             canv.Display();
