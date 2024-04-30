@@ -68,6 +68,11 @@ namespace zenithos
                 if (applicationsButtons[i].clickedOnce)
                 {
                     Window instance = applications[i].constructor();
+                    int mx = (int)MouseManager.X;
+                    int my = (int)MouseManager.Y;
+                    int dmx = MouseManager.DeltaX;
+                    int dmy = MouseManager.DeltaY;
+                    instance.Start(canv, mx, my, MouseManager.MouseState == MouseState.Left, dmx, dmy);
                     windows.Add(instance);
                     mainBar = false;
                     break;
@@ -149,6 +154,7 @@ namespace zenithos
 
                 applications.Add(new Application(() => new Calc(), "Calculator", new Calc().logo));
                 applications.Add(new Application(() => new CalcLegacy(), "Calculator (Legacy)",new CalcLegacy().logo));
+                applications.Add(new Application(() => new Terminal(), "Terminal", new Terminal().logo));
                 applications.Add(new Application(() => new TestWindow(), "Test Window",new TestWindow().logo));
                 applications.Add(new Application(() => new UITest(), "Input Field Test", new UITest().logo));
                 applications.Add(new Application(() => new About(), "About Zenith...", new About().logo));

@@ -79,6 +79,10 @@ namespace zenithos.Windows
                 h = MostBottomControl.y + margin;
             }
         }
+        public virtual void Start(VBECanvas canv, int mX, int mY, bool mD, int dmX, int dmY)
+        {
+
+        }
 
         public virtual void Update(VBECanvas canv, int mX, int mY, bool mD, int dmX, int dmY)
         {
@@ -120,14 +124,12 @@ namespace zenithos.Windows
           
             if (Kernel.activeIndex == Kernel.windows.FindIndex(x => x == this) && Kernel.activeIndex != -1)
             {
-               
                 canv.DrawFilledRectangle(Kernel.highlightCol, x, y, w, window_titlebarsize);
                 canv.DrawRectangle(Kernel.highlightCol, x, y + window_titlebarsize, w, h);
                 canv.DrawString(title, font, Kernel.textColLight, x + (int)logo.Width+20, y + 10);
             }
             else
             {
-           
                 canv.DrawFilledRectangle(Kernel.bgCol, x, y, w, window_titlebarsize);
                 canv.DrawRectangle(Kernel.textColLight, x, y + window_titlebarsize, w, h);
                 canv.DrawRectangle(Kernel.highlightCol, x, y, w, window_titlebarsize);
