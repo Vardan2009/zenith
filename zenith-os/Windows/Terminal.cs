@@ -135,7 +135,7 @@ namespace zenithos.Windows
             }
             
             
-            if(canwrite)
+            if(canwrite && myIndex == Kernel.activeIndex)
             {
                 canv.DrawChar('_', font, curcol, x + 1 + ((content[at].Length+inpstr.Length) * Kernel.defFont.Width), y + 1 + window_titlebarsize + at * Kernel.defFont.Height);
                 canv.DrawString(inpstr, font, curcol, x + 1 + (content[at].Length) * Kernel.defFont.Width, y + 1 + window_titlebarsize + at * Kernel.defFont.Height);

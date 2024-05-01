@@ -22,7 +22,7 @@ namespace zenithos.Windows
         public List<Control> controls = new();
         public bool resizable = false;
         public Button closeButton;
-        int myIndex = -1;
+        protected int myIndex = -1;
 
         [ManifestResourceStream(ResourceName = "zenithos.Resource.Applogos.gear.bmp")]
         static byte[] gearBytes;

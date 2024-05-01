@@ -24,7 +24,7 @@ namespace zenithos.Utils
     public class CLIEcho : CLICommand
     {
         public CLIEcho() : base("Echo", "Echoes given string", new string[] { "echo","out"} ) {}
-
+         
         public override void Execute(List<string> args, Terminal instance)
         {
             instance.curcol = Color.White;
@@ -93,7 +93,7 @@ namespace zenithos.Utils
                 instance.print_str($"                                   | \n");
                 instance.print_str($"            @@     @\\ /@  @@@@*    | \n");
                 instance.print_str($"           @..@    @ @ @  @.   @   | \n");
-                instance.print_str($"          @    @   @   @  @@@@*    |\n");
+                instance.print_str($"          @    @   @   @  @@@@*    | \n");
             }
             instance.curcol = Color.White;
         }
