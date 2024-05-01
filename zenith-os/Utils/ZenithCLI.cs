@@ -21,6 +21,21 @@ namespace zenithos.Utils
         public virtual void Execute(List<string> args,Terminal instance) { }
     }
 
+    public class CLIEcho : CLICommand
+    {
+        public CLIEcho() : base("Echo", "Echoes given string", new string[] { "echo","out"} ) {}
+
+        public override void Execute(List<string> args, Terminal instance)
+        {
+            instance.curcol = Color.White;
+            for(int i =1;i<args.Count;i++)
+            {
+                instance.print_str(args[i]+" ");
+            }
+            instance.print_str("\n");
+        }
+    }
+
     public class CLIClearScreen : CLICommand
     {
         public CLIClearScreen() : base("ClearScreen","Clears the screen", new string[] { "cls", "clear", "clr" }) { }
@@ -90,6 +105,7 @@ namespace zenithos.Utils
         public static CLICommand[] Commands = {
             new CLIClearScreen(),
             new CLIInfo(),
+            new CLIEcho(),
         };
         public static void ParseCommand(string command,Terminal instance)
         {

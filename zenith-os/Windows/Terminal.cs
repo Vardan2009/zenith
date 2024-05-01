@@ -22,6 +22,7 @@ namespace zenithos.Windows
         void print_newline()
         {
             at++;
+
             if (at >= rown)
             {
                 at = rown - 1;
@@ -35,9 +36,12 @@ namespace zenithos.Windows
                     }
                 }
             }
-               
+
             content[at] = "";
-            colors[at] = new Color[coln];
+            for (int i = 0; i < coln; i++)
+            {
+                colors[at][i] = Color.Black;
+            }
         }
 
         void print_char(char c)
