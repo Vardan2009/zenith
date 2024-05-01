@@ -100,7 +100,7 @@ namespace zenithos
             }
         }
 
-        static void HandleFatalError(Exception e)
+        public static void HandleFatalError(Exception e)
         {
             canv.Clear(Color.DarkSlateBlue);
             Thread.Sleep(10);

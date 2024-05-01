@@ -1,22 +1,23 @@
 ﻿using Cosmos.System;
 using Cosmos.System.Graphics;
 using Cosmos.System.Graphics.Fonts;
+using System;
+using System.Threading;
+using zenithos.Utils;
 using Color = System.Drawing.Color;
 
 namespace zenithos.Windows
 {
-    internal class Terminal : Window
+    public class Terminal : Window
     {
-        Color curcol = Color.White;
+        public Color curcol = Color.White;
         int rown = 50,coln = 50;
         string[] content;
         Color[][] colors;
         int at = 0;
-
-
         bool canwrite = false;
+        public static string clilogo = "\n _____              _ __  __    ________    ____\n/__  /  ___  ____  (_) /_/ /_  / ____/ /   /  _/\n  / /  / _ \\/ __ \\/ / __/ __ \\/ /   / /    / /  \n / /__/  __/ / / / / /_/ / / / /___/ /____/ /   \n/____/\\___/_/ /_/_/\\__/_/ /_/\\____/_____/___/   \n                                                \n";
 
-        string clilogo = "_____              _ __  __    ________    ____\n/__  /  ___  ____  (_) /_/ /_  / ____/ /   /  _/\n  / /  / _ \\/ __ \\/ / __/ __ \\/ /   / /    / /  \n / /__/  __/ / / / / /_/ / / / /___/ /____/ /   \n/____/\\___/_/ /_/_/\\__/_/ /_/\\____/_____/___/   \n                                                \n";
 
         void print_newline()
         {
@@ -24,41 +25,49 @@ namespace zenithos.Windows
             if (at >= rown)
             {
                 at = rown - 1;
-                for (int i = 0; i < rown-1; i++) 
+                for (int i = 0; i < rown - 1; i++)
                 {
                     content[i] = content[i + 1];
-                    colors[i] = colors[i + 1];
+                    colors[i] = new Color[coln];
+                    for (int j = 0; j < colors[i].Length; j++)
+                    {
+                        colors[i][j] = colors[i + 1][j];
+                    }
                 }
-                content[at] = "";
-                colors[at] = new Color[coln];
             }
+               
+            content[at] = "";
+            colors[at] = new Color[coln];
         }
-
 
         void print_char(char c)
         {
-            if (content[at].Length >= coln)
-            {
-                print_newline();
-            }
-            if (c == '\n')
-            {
-                print_newline();
-                return;
-            }
-            content[at] += c;
-            colors[at][content[at].Length - 1] = curcol;
+           if (content[at].Length >= coln)
+           {
+               print_newline();
+           }
+
+           if (c == '\n')
+           {
+               print_newline();
+               return;
+           }
+                
+           content[at] += c;
+           colors[at][content[at].Length - 1] = curcol;
         }
 
-        void print_str(string str)
+        public void print_str(string str)
         {
+
             foreach(char c in str)
             {
-                print_char(c);
+                    print_char(c);
             }
+
         }
 
-        public Terminal() : base(300, 300, 500, 300, "Terminal", Kernel.defFont, false)
+        public Terminal() : base(300, 300, 700, 300, "Terminal", Kernel.defFont, false)
         {
             rown = (int)(h / Kernel.defFont.Height);
             coln = (int)(w / Kernel.defFont.Width);
@@ -72,7 +81,7 @@ namespace zenithos.Windows
             }
         }
 
-        void print_clear()
+        public void print_clear()
         {
             for (int i = 0; i < rown; i++)
             {
@@ -92,15 +101,7 @@ namespace zenithos.Windows
 
         void parse_input(string s)
         {
-            if (s == "cls")
-            {
-                print_clear();
-            }
-            else
-            {
-                print_str($"You wrote: {s}");
-            }
-
+            ZenithCLI.ParseCommand(s, this);
             print_newline();
             input_prefix();
             canwrite = true;
