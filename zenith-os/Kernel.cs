@@ -13,6 +13,8 @@ using Cosmos.HAL.Drivers.Audio;
 using Cosmos.System.Audio.IO;
 using Cosmos.System.Audio;
 using System.Threading;
+using Cosmos.System.FileSystem;
+using Cosmos.System.FileSystem.VFS;
 
 namespace zenithos
 {
@@ -48,6 +50,8 @@ namespace zenithos
         static byte[] sampleAudioBytes;
 
         public static Bitmap bg,cursor,logo;
+
+        CosmosVFS fs = new CosmosVFS();
 
         void DrawTopbar()
         {
@@ -133,7 +137,8 @@ namespace zenithos
         {
             try
             {
-
+                try { VFSManager.RegisterVFS(fs); } catch { }
+                
                 canv = new VBECanvas();
 
                 bool throwTestError = false;
@@ -181,6 +186,7 @@ namespace zenithos
             {
                HandleFatalError(e);
             }
+
         }
 
         public void DrawCursor(uint x, uint y)

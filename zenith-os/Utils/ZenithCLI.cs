@@ -1,6 +1,9 @@
 ﻿using Cosmos.Core;
+using Cosmos.System.FileSystem;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using zenithos.Windows;
 using Color = System.Drawing.Color;
 namespace zenithos.Utils
@@ -99,13 +102,120 @@ namespace zenithos.Utils
         }
     }
 
+    public class CLIDir : CLICommand
+    {
+        public CLIDir() : base("Dir", "Outputs Current Directory Listing", new string[] { "dir", "ls" }) { }
+
+        public override void Execute(List<string> args, Terminal instance)
+        {
+            instance.print_str($" --- Directory Listing of {instance.pwd} ---\n");
+            string [] dirs = Directory.GetDirectories(instance.pwd);
+            instance.curcol = Color.Yellow;
+            foreach(string dir in dirs)
+            {
+                instance.print_str($" - DIR   {dir}\n");
+            }
+            instance.curcol = Color.White;
+            string[] files = Directory.GetFiles(instance.pwd);
+            foreach (string file in files)
+            {
+                instance.print_str($" - FILE  {file}\n");
+            }
+            instance.curcol = Color.White;
+        }
+    }
+
+    public class CLICD : CLICommand
+    {
+        public CLICD() : base("CD", "Change Directory", new string[] { "cd", "chdir" }) { }
+
+        public override void Execute(List<string> args, Terminal instance)
+        {
+            if(args.Count != 2)
+            {
+                instance.print_str("Usage: cd [dirpath]");
+                return;
+            }
+
+            if (args[1] == "..")
+            {
+                instance.pwd = Directory.GetParent(instance.pwd).FullName;
+            }
+            else if (args[1] == ".")
+            {
+                return;
+            }
+            else
+            {
+                string oldpwd = instance.pwd;
+                if(Path.IsPathRooted(args[1]))
+                {
+                    instance.pwd = args[1];
+                }
+                else
+                {
+                    instance.pwd = Path.Join(instance.pwd, args[1]);
+                }
+                if(!Directory.Exists(instance.pwd))
+                {
+                    instance.curcol = Color.Red;
+                    instance.print_str($"[ERR] No such path {instance.pwd}\n");
+                    instance.curcol = Color.White;
+                    instance.pwd = oldpwd;
+                }
+            }
+        }
+
+    }
+
+    public class CLICat : CLICommand
+    {
+        public CLICat() : base("Cat", "Read file", new string[] { "cat", "read" }) { }
+        public override void Execute(List<string> args, Terminal instance)
+        {
+            if (args.Count != 2)
+            {
+                instance.print_str("Usage: cat [dirpath]");
+                return;
+            }
+            string fpath = "";
+
+            if (Path.IsPathRooted(args[1]))
+            {
+                fpath = args[1];
+            }
+            else
+            {
+                fpath = Path.Join(instance.pwd, args[1]);
+            }
+
+            if (!File.Exists(fpath))
+            {
+                instance.curcol = Color.Red;
+                instance.print_str($"[ERR] No such file {fpath}\n");
+                instance.curcol = Color.White;
+            }
+
+            string contents = File.ReadAllText(fpath);
+
+            instance.print_str(contents);
+        }
+    }
+
+
+
 
     public class ZenithCLI
     {
+
+
         public static CLICommand[] Commands = {
             new CLIClearScreen(),
             new CLIInfo(),
             new CLIEcho(),
+            new CLIDir(),
+            new CLICD(),
+            new CLICat(),
         };
         public static void ParseCommand(string command,Terminal instance)
         {
@@ -131,6 +241,9 @@ namespace zenithos.Utils
                     }
                 }
             }
+            instance.curcol = Color.Red;
+            instance.print_str($"[ERR] No such command {args[0]}\n");
+            instance.curcol = Color.White;
         }
     }
 }

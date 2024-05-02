@@ -13,11 +13,12 @@ namespace zenithos.Windows
         public Color curcol = Color.White;
         int rown = 50,coln = 50;
         string[] content;
-        Color[][] colors;
+        private Color[][] colors;
         int at = 0;
         bool canwrite = false;
         public static string clilogo = "\n _____              _ __  __    ________    ____\n/__  /  ___  ____  (_) /_/ /_  / ____/ /   /  _/\n  / /  / _ \\/ __ \\/ / __/ __ \\/ /   / /    / /  \n / /__/  __/ / / / / /_/ / / / /___/ /____/ /   \n/____/\\___/_/ /_/_/\\__/_/ /_/\\____/_____/___/   \n                                                \n";
 
+        public string pwd = @"0:\";
 
         void print_newline()
         {
@@ -99,7 +100,13 @@ namespace zenithos.Windows
         void input_prefix()
         {
             curcol = Color.Yellow;
-            print_str("$> ");
+            print_str("zenith");
+            curcol = Color.White;
+            print_char('@');
+            curcol = Color.Aqua;
+            print_str(pwd);
+            curcol = Color.White;
+            print_str("$- ");
             curcol = Color.White;
         }
 
