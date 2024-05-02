@@ -106,22 +106,49 @@ namespace zenithos.Utils
     {
         public CLIDir() : base("Dir", "Outputs Current Directory Listing", new string[] { "dir", "ls" }) { }
 
-        public override void Execute(List<string> args, Terminal instance)
+        void PrintRecursiveDirectory(string path, int ident,Terminal instance)
         {
-            instance.print_str($" --- Directory Listing of {instance.pwd} ---\n");
-            string [] dirs = Directory.GetDirectories(instance.pwd);
+            string identstr = "";
+            for (int i = 0; i < ident; i++) { identstr += "--"; }
+
+            string[] dirs = Directory.GetDirectories(path);
             instance.curcol = Color.Yellow;
-            foreach(string dir in dirs)
+            foreach (string dir in dirs)
             {
-                instance.print_str($" - DIR   {dir}\n");
+                instance.print_str($" {identstr} DIR   {dir}\n");
+                PrintRecursiveDirectory(Path.Combine(path, dir), ident + 1, instance);
             }
             instance.curcol = Color.White;
-            string[] files = Directory.GetFiles(instance.pwd);
+            string[] files = Directory.GetFiles(path);
             foreach (string file in files)
             {
-                instance.print_str($" - FILE  {file}\n");
+                instance.print_str($" {identstr} FILE  {file}\n");
             }
-            instance.curcol = Color.White;
+        }
+
+        public override void Execute(List<string> args, Terminal instance)
+        {
+            if (args.Count == 2 && args[1] == "-r")
+            {
+                PrintRecursiveDirectory(instance.pwd, 1,instance);
+            }
+            else
+            {
+                instance.print_str($" --- Directory Listing of {instance.pwd} ---\n");
+                string[] dirs = Directory.GetDirectories(instance.pwd);
+                instance.curcol = Color.Yellow;
+                foreach (string dir in dirs)
+                {
+                    instance.print_str($" - DIR   {dir}\n");
+                }
+                instance.curcol = Color.White;
+                string[] files = Directory.GetFiles(instance.pwd);
+                foreach (string file in files)
+                {
+                    instance.print_str($" - FILE  {file}\n");
+                }
+                instance.curcol = Color.White;
+            }
         }
     }
 

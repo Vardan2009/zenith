@@ -104,7 +104,7 @@ namespace zenithos
             }
         }
 
-        public static void HandleFatalError(Exception e)
+        static void FatalErrorInternal(Exception e)
         {
             canv.Clear(Color.DarkSlateBlue);
             Thread.Sleep(10);
@@ -114,15 +114,15 @@ namespace zenithos
                  "",
                  $"The system has encountered an uncaught fatal exception",
                  "","Message: "
-                 ,e.Message,"","Click any key to reboot"
+                 ,e.ToString(),"","Click any key to reboot"
             };
 
-            int y = 10; 
+            int y = 10;
 
             foreach (string line in lines)
             {
                 canv.DrawString(line, PCScreenFont.Default, Color.White, 10, y);
-                y += PCScreenFont.Default.Height+5;
+                y += PCScreenFont.Default.Height + 5;
                 Thread.Sleep(10);
                 canv.Display();
             }
@@ -131,6 +131,17 @@ namespace zenithos
 
             System.Console.ReadKey(true);
             Cosmos.System.Power.Reboot();
+        }
+
+        public static void HandleUncaughtError(Exception e)
+        {
+            /*try{
+                ShowMessage(e.Message, "Zenith", MsgType.Error);
+            }
+            catch
+            {*/
+                FatalErrorInternal(e);
+            //}
         }
 
         protected override void BeforeRun()
@@ -184,7 +195,7 @@ namespace zenithos
             }
             catch (Exception e)
             {
-               HandleFatalError(e);
+               HandleUncaughtError(e);
             }
 
         }
@@ -236,7 +247,7 @@ namespace zenithos
             }
             catch (Exception e)
             {
-              HandleFatalError(e);
+              HandleUncaughtError(e);
             }
         }
     }
