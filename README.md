@@ -1,5 +1,11 @@
 ![bg1](https://github.com/Vardan2009/zenith/assets/70532109/90719ce4-63de-450f-aba9-dc426747badf)
 
+> [!WARNING]  
+> ### ZenithOS has been discontinued and will no longer recieve updates
+
+> [!TIP]  
+> ### Make sure to check out [Radiant](https://github.com/Vardan2009/radiant), a newer, better and more efficient system based on Zenith
+
 # Current Features
  Features
 - Multitasking
