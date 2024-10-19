@@ -3,9 +3,6 @@
 > [!WARNING]  
 > ### ZenithOS has been discontinued and will no longer recieve updates
 
-> [!TIP]  
-> ### Make sure to check out [Radiant](https://github.com/Vardan2009/radiant), a newer, better and more efficient system based on Zenith
-
 # Current Features
  Features
 - Multitasking
